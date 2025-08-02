@@ -1,0 +1,78 @@
+- name: user
+  hosts: user
+  become: yes
+  tasks:
+
+    - name: disable old js and enable nodejs 18
+      ansible.builtin.shell: dnf module disable nodejs -y && dnf module enable nodejs:18 -y
+
+    - name: install node js
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present
+    
+    - name: add roboshop user
+      ansible.builtin.user:
+        name: roboshop
+    
+    - name: create app directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+    
+    - name: downlaod app package
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/user.zip
+        dest: /tmp/
+    
+    - name: unzip user directory
+      ansible.builtin.unarchive:
+        src: /tmp/user.zip
+        dest: /app
+        remote_src: yes
+
+    - name: copy user service
+      ansible.builtin.copy:
+        src: user.service
+        dest: /etc/systemd/system/
+
+    - name: install npm
+      ansible.builtin.command: npm install
+      args:
+        chdir: /app
+
+    - name: daemon reload
+      ansible.builtin.systemd_service:
+        name: catalogue
+        daemon_reload: true
+
+    - name: copy mongo-db repo
+      ansible.builtin.copy:
+        src: mongodb.repo
+        dest: /etc/yum.repos.d/
+
+    - name: install mongodb client
+      ansible.builtin.package:
+        name: mongodb-org-shell
+        state: present
+
+    - name: get the categories count
+      ansible.builtin.command:  mongo --host mongodb.mohankodela.shop --quiet --eval 'db = db.getSiblingDB("user"); db.products.count()'
+      register: user_count
+
+  # - name: print the count
+  #   ansible.builtin.debug:
+  #     msg: "product count: {{product_count}}"
+
+    - name: load user data
+      ansible.builtin.command: mongo --host mongodb.mohankodela.shop < /app/schema/user.js
+      when: user_count.stdout == "0" # keep double quotes
+
+    - name: start and enable user
+      ansible.builtin.service:
+        name: user
+        state: restarted
+        enabled: yes        
+
+
+    
