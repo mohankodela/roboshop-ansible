@@ -1,0 +1,19 @@
+- name: redis
+  hosts: redis
+  become: yes
+  tasks:
+    - name: disable redis
+      ansible.builtin.dnf:
+        name: redis
+        state: absent
+    
+    - name: enable redis
+      ansible.builtin.command: dnf module enable redis:6 -y
+
+    - name: install redis
+      ansible.builtin.dnf:
+        name: redis
+        state: present
+        enabled: yes
+    
+    
