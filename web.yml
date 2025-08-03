@@ -14,9 +14,7 @@
         enabled: yes
 
     - name: Remove default content
-      ansible.builtin.file:
-        path: /usr/share/nginx/html/
-        state: absent
+      ansible.builtin.command: rm -rf /usr/share/nginx/html/*
           
     - name: Download web content
       ansible.builtin.get_url:
