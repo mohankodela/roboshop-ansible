@@ -69,9 +69,9 @@
 
     - name: load schema
       ansible.builtin.shell: |
-        "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/schema.sql"
-        "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/app-user.sql"
-        "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/master-data.sql"
+        "mysql -h mysql.mohankodela.shop -uroot -p{{mysql_password}} < /app/db/schema.sql"
+        "mysql -h mysql.mohankodela.shop -uroot -p{{mysql_password}} < /app/db/app-user.sql"
+        "mysql -h mysql.mohankodela.shop -uroot -p{{mysql_password}} < /app/db/master-data.sql"
       when: schema.stdout != "1"
 
     - name: start and enable shipping
