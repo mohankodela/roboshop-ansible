@@ -10,9 +10,7 @@
         state: present
 
     - name: Ensure python3-pip is installed
-      ansible.builtin.package:
-        name: python3-pip
-        state: present
+      ansible.builtin.command: yum install python39-pip
 
     - name: install PyMySQL and cryptography 
       ansible.builtin.pip:
