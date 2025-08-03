@@ -37,7 +37,7 @@
     
     - name: Download dependencies
       ansible.builtin.command: npm install
-        args:
+      args:
           chdir: /app
 
     - name: copy service file
