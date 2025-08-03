@@ -72,7 +72,7 @@
         "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/schema.sql"
         "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/app-user.sql"
         "mysql -h mysql.mohankodela.shop -uroot -pRoboShop@1 < /app/db/master-data.sql"
-      when: schema.stdout != "1
+      when: schema.stdout != "1"
 
     - name: start and enable shipping
       ansible.builtin.service:
