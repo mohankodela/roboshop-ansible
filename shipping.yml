@@ -19,7 +19,6 @@
       loop:
         - cryptography
         - PyMySQL
-        - MySQL-python
     
     - name: add roboshop user
       ansible.builtin.user:
