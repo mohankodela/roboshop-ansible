@@ -17,8 +17,6 @@
       ansible.builtin.file:
         path: /usr/share/nginx/html/
         state: absent
-        with_fileglob:
-          - /usr/share/nginx/html/*
           
     - name: Download web content
       ansible.builtin.get_url:
