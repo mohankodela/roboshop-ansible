@@ -12,3 +12,31 @@
         name: nginx
         state: started
         enabled: yes
+
+    - name: Remove default content
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: absent
+        with_fileglob:
+          - /usr/share/nginx/html/*
+          
+    - name: Download web content
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/web.zip
+        dest: /tmp
+
+    - name: Unzip the file to web
+      ansible.builtin.unarchive:
+        src: /tmp/web.zip
+        dest: /usr/share/nginx/html
+        remote_src: yes
+    
+    - name: copy roboshop config file
+      ansible.builtin.copy:
+        src: roboshop.conf
+        dest: /etc/nginx/default.d/
+
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
