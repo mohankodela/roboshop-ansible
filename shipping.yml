@@ -19,7 +19,6 @@
       loop:
         - cryptography
         - PyMySQL
-        - mysqlclient
         - MySQL-python
     
     - name: add roboshop user
