@@ -8,6 +8,14 @@
       ansible.builtin.dnf:
         name: maven
         state: present
+
+    - name: install PyMySQL and cryptography 
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        executable: pip3.9
+      loop:
+        - cryptography
+        - PyMySQL
     
     - name: add roboshop user
       ansible.builtin.user:
@@ -65,7 +73,7 @@
           name: all
           login_user: root
           login_password: RoboShop@1
-          login_host: mysql.daws84s.site
+          login_host: mysql.mohankodela.shop
           state: import
           target: "{{ item }}"
       loop:
